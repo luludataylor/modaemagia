@@ -1,4 +1,4 @@
-#Plataforma de Moda Circular com Inteligência Artificial
+# Plataforma de Moda Circular com Inteligência Artificial
 
 Desenvolver uma plataforma que, a partir do uso da **inteligência artificial**, auxilie na reutilização de roupas, gerando combinações a partir das peças registradas pelo usuário. 
 
