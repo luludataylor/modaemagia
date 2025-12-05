@@ -1,0 +1,750 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Home — Moda & Magia</title>
+
+  <style>
+    :root{
+      --bg:#0a0a0b;
+      --panel:#0f1012;
+      --panel-2:#111214;
+      --muted:#bfc5cc;
+      --accent:#c48fbf;
+      --accent-2:#7aa0c7;
+      --glass: rgba(255,255,255,0.03);
+      --radius:12px;
+      --maxw:1200px;
+      font-family: Inter, "Helvetica Neue", Arial, sans-serif;
+      color-scheme: dark;
+    }
+
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%}
+    body{
+      background: linear-gradient(180deg, #070708 0%, #0c0c0d 100%);
+      color:#e9eef2;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      font-size:15px;
+      line-height:1.4;
+    }
+
+    .app{
+      max-width:var(--maxw);
+      margin:18px auto;
+      display:grid;
+      grid-template-columns:260px 1fr;
+      gap:18px;
+      padding:18px;
+      min-height:80vh;
+    }
+
+    /* Sidebar */
+    .sidebar{
+      background:linear-gradient(180deg,var(--panel), #0b0b0c);
+      border-radius:14px;
+      padding:14px;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.6);
+      display:flex;flex-direction:column;gap:12px;
+    }
+    .brand{
+      display:flex;gap:10px;align-items:center;
+    }
+    .logo{
+      width:46px;height:46px;border-radius:10px;overflow:hidden;display:flex;align-items:center;justify-content:center;
+      background:linear-gradient(135deg,var(--accent),var(--accent-2));border:1px solid rgba(255,255,255,0.04);cursor:pointer;
+    }
+    .logo img{width:100%;height:100%;object-fit:cover;display:block}
+    .brand-info{display:flex;flex-direction:column}
+    .brand-info h3{font-size:14px;margin-bottom:2px}
+    .brand-info p{font-size:12px;color:var(--muted)}
+
+    .user-card{
+      margin-top:8px;padding:10px;border-radius:10px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      display:flex;gap:10px;align-items:center;
+    }
+    .user-avatar{width:44px;height:44px;border-radius:10px;background:#fff;color:#111;display:flex;align-items:center;justify-content:center;font-weight:800}
+    .user-meta{font-size:13px}
+    .user-meta b{display:block;color:#fff}
+
+    nav.menu{margin-top:8px;display:flex;flex-direction:column;gap:6px}
+    .menu a{
+      display:flex;justify-content:space-between;align-items:center;padding:10px 10px;border-radius:10px;color:var(--muted);text-decoration:none;
+    }
+    .menu a.active, .menu a:hover{background:var(--glass);color:#fff}
+
+    .menu small{font-size:12px;color:var(--muted);display:block;margin-top:8px;padding-left:6px}
+
+    .logout{
+      margin-top:auto;display:flex;gap:8px;align-items:center;justify-content:center;padding-top:8px;
+    }
+    .btn{
+      padding:10px 12px;border-radius:9px;border:0;background:var(--accent);color:#111;font-weight:800;cursor:pointer;
+    }
+    .btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.04);color:var(--muted)}
+
+    /* Main area */
+    .main{
+      display:flex;flex-direction:column;gap:14px;
+    }
+    .topbar{
+      display:flex;justify-content:space-between;align-items:center;gap:12px;
+    }
+    .search{
+      background:var(--panel-2);padding:10px;border-radius:10px;display:flex;gap:8px;align-items:center;width:100%;
+    }
+    .search input{background:transparent;border:0;color:#fff;outline:none;width:100%}
+
+    .grid{
+      display:grid;grid-template-columns:repeat(3,1fr);gap:14px;
+    }
+    .card{
+      background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      padding:14px;border-radius:12px;min-height:90px;
+    }
+    .card h4{margin-bottom:8px;color:#fff}
+    .muted{color:var(--muted);font-size:13px}
+
+    /* wardrobe / marketplace list */
+    .list{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
+    .item{
+      background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border-radius:10px;padding:10px;display:flex;flex-direction:column;gap:8px;align-items:center;text-align:center;
+    }
+    .item img{width:100%;height:140px;object-fit:cover;border-radius:8px}
+
+    /* forms */
+    form.row{display:flex;gap:8px;flex-wrap:wrap}
+    form .field{flex:1;min-width:160px}
+    input, textarea, select{padding:8px;border-radius:8px;border:0;background:rgba(255,255,255,0.03);color:#fff;outline:none}
+
+    /* modal */
+    .modal{
+      position:fixed;left:0;top:0;right:0;bottom:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,0.6);z-index:2000;
+    }
+    .modal .box{
+      width:min(820px,95%);background:var(--panel);padding:14px;border-radius:12px;
+    }
+    .modal img{width:100%;height:auto;border-radius:8px}
+
+    /* responsive */
+    @media (max-width:980px){
+      .app{grid-template-columns:1fr; padding:12px}
+      .grid{grid-template-columns:repeat(2,1fr)}
+    }
+    @media (max-width:600px){
+      .grid{grid-template-columns:1fr}
+      .list{grid-template-columns:1fr}
+      .brand-info h3{font-size:13px}
+    }
+
+    /* small utilities */
+    .center{display:flex;align-items:center;justify-content:center}
+    .small{font-size:13px;color:var(--muted)}
+    .chip{padding:6px 8px;border-radius:999px;background:rgba(255,255,255,0.03);font-weight:700}
+  </style>
+</head>
+<body>
+  <div class="app" role="application" aria-label="Painel Moda & Magia">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar" aria-label="Menu principal">
+      <div class="brand">
+        <div class="logo" id="homeLogo" title="Home">
+          <img src="Group 3.svg" alt="Moda & Magia">
+        </div>
+        <div class="brand-info">
+          <h3>Moda & Magia</h3>
+          <p class="muted">assistente de moda sustentável</p>
+        </div>
+      </div>
+
+      <div class="user-card" id="userCard">
+        <div class="user-avatar" id="sidebarAvatar">LM</div>
+        <div class="user-meta">
+          <b id="userName">Usuário</b>
+          <span id="userEmail" class="muted">email@exemplo.com</span>
+        </div>
+      </div>
+
+      <nav class="menu" role="navigation" aria-label="Navegação principal">
+        <a href="#" data-section="home" class="active">Home <span class="chip" id="countHome"></span></a>
+        <a href="#" data-section="guarda">Meu Guarda-roupa <span class="chip" id="countGuarda"></span></a>
+        <a href="#" data-section="market">Marketplace <span class="chip" id="countMarket"></span></a>
+        <a href="#" data-section="mapa">Mapa</a>
+        <a href="#" data-section="forum">Fórum <span class="chip" id="countForum"></span></a>
+        <a href="#" data-section="perfil">Perfil</a>
+        <small>Atalhos: Ctrl+H (Home) • Ctrl+G (Guarda) • Ctrl+M (Marketplace)</small>
+      </nav>
+
+      <div class="logout">
+        <button class="btn ghost" id="btnLogout">Sair</button>
+        <button class="btn" id="btnNewItem">Novo</button>
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main" id="mainContent">
+      <!-- topbar -->
+      <div class="topbar">
+        <div class="search">
+          <input id="globalSearch" placeholder="Buscar peças, anúncios ou posts..." />
+        </div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <div class="small muted">Bem-vindo</div>
+          <div class="chip" id="topUserName">Usuário</div>
+        </div>
+      </div>
+
+      <!-- Sections container -->
+      <section id="sectionHome" class="view">
+        <div class="grid">
+          <div class="card">
+            <h4>Seu inventário</h4>
+            <div class="muted">Quantidade total de peças no guarda-roupa</div>
+            <div style="margin-top:12px;font-size:28px;font-weight:800" id="statItems">0</div>
+            <div style="margin-top:10px">
+              <button class="btn" id="openGuardaBtn">Ir para meu guarda-roupa</button>
+            </div>
+          </div>
+
+          <div class="card">
+            <h4>Marketplace próximo</h4>
+            <div class="muted">Anúncios populares e destaque do dia</div>
+            <div style="margin-top:10px" id="marketHighlight">
+              <!-- placeholder de divulgação -->
+              <div class="muted">Loja: Brechó Rua das Flores — Promoção: 30% em vestidos vintage</div>
+            </div>
+            <div style="margin-top:12px">
+              <a class="btn ghost" id="openMapBtn">Ver no mapa</a>
+            </div>
+          </div>
+
+          <div class="card">
+            <h4>Notificações do fórum</h4>
+            <div class="muted">Novas discussões e menções</div>
+            <div style="margin-top:10px;font-weight:700" id="forumNotifications">0 novas</div>
+            <div style="margin-top:12px">
+              <button class="btn" id="openForumBtn">Ir para o fórum</button>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top:14px" class="card">
+          <h4>Atalhos rápidos</h4>
+          <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">
+            <button class="btn" id="shortcutLook">Gerar look (IA simulada)</button>
+            <button class="btn ghost" id="shortcutAdd">Adicionar peça</button>
+            <button class="btn ghost" id="shortcutSell">Publicar item</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Guarda-roupa -->
+      <section id="sectionGuarda" class="view" style="display:none">
+        <div class="card">
+          <h4>Meu Guarda-roupa</h4>
+          <div class="muted">Adicione fotos, nome e categoria das suas peças. Os itens são salvos no navegador (localStorage).</div>
+
+          <form id="addPieceForm" style="margin-top:12px" class="row">
+            <input class="field" id="pieceName" placeholder="Nome da peça (ex: Camisa floral)" required>
+            <select class="field" id="pieceCategory">
+              <option value="camisa">Camisa</option>
+              <option value="calça">Calça</option>
+              <option value="vestido">Vestido</option>
+              <option value="sapato">Sapato</option>
+              <option value="acessório">Acessório</option>
+            </select>
+            <input type="file" id="pieceFile" accept="image/*" class="field">
+            <button class="btn" id="btnAddPiece" type="button">Adicionar</button>
+          </form>
+
+          <div style="margin-top:12px" id="wardrobeList" class="list"></div>
+
+          <div style="margin-top:12px" class="muted small">Sugestão IA: clique em "Gerar look (IA)" para ver uma combinação simulada com suas peças.</div>
+          <div style="margin-top:8px">
+            <button class="btn" id="btnGenLook">Gerar look (IA)</button>
+          </div>
+
+          <div id="iaResult" style="margin-top:10px;display:none" class="card">
+            <h4>Look gerado</h4>
+            <div id="iaPreview" class="list" style="grid-template-columns:repeat(4,1fr)"></div>
+            <div style="margin-top:8px">
+              <button class="btn ghost" id="saveLookBtn">Salvar combinação (simulado)</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Marketplace -->
+      <section id="sectionMarket" class="view" style="display:none">
+        <div class="card">
+          <h4>Marketplace</h4>
+          <div class="muted">Veja itens à venda, valores e quem está vendendo. Você também pode publicar seus itens.</div>
+
+          <form id="addMarketForm" style="margin-top:12px" class="row">
+            <input class="field" id="marketTitle" placeholder="Título do anúncio (ex: Bolsa vintage)">
+            <input class="field" id="marketPrice" placeholder="Valor (R$)">
+            <input class="field" id="marketSeller" placeholder="Vendedor / contato">
+            <input class="field" id="marketAddress" placeholder="Endereço (opcional)">
+            <input class="field" id="marketFile" type="file" accept="image/*">
+            <button class="btn" id="btnAddMarket" type="button">Publicar</button>
+          </form>
+
+          <div style="margin-top:12px" id="marketList" class="list"></div>
+        </div>
+      </section>
+
+      <!-- Mapa -->
+      <section id="sectionMapa" class="view" style="display:none">
+        <div class="card">
+          <h4>Mapa — Brechós e locais</h4>
+          <div class="muted">Mapa integrado (OpenStreetMap embed). Use o botão para simular encontrar brechós próximos.</div>
+          <div style="margin-top:12px">
+            <iframe id="osmFrame" src="https://www.openstreetmap.org/export/embed.html?bbox=-43.21,-22.02,-43.17,-21.99&layer=mapnik" style="border:0;width:100%;height:420px;border-radius:8px"></iframe>
+          </div>
+          <div style="margin-top:12px">
+            <button class="btn" id="btnFindBrechos">Encontrar brechós próximos (simulação)</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Fórum -->
+      <section id="sectionForum" class="view" style="display:none">
+        <div class="card">
+          <h4>Fórum</h4>
+          <div class="muted">Compartilhe ideias, tire dúvidas e receba notificações.</div>
+
+          <form id="postForm" style="margin-top:12px" class="row">
+            <input class="field" id="postTitle" placeholder="Título do post">
+            <input class="field" id="postTags" placeholder="Tags (virgula)">
+            <button class="btn" id="btnPost" type="button">Postar</button>
+          </form>
+
+          <div style="margin-top:12px" id="forumList" class="list"></div>
+        </div>
+      </section>
+
+      <!-- Perfil -->
+      <section id="sectionPerfil" class="view" style="display:none">
+        <div class="card">
+          <h4>Perfil</h4>
+          <div class="muted">Gerencie seu nome e (se aplicável) sua senha.</div>
+
+          <form id="profileForm" style="margin-top:12px;max-width:640px" class="row">
+            <input class="field" id="profileName" placeholder="Nome completo">
+            <input class="field" id="profileEmail" placeholder="E-mail" disabled>
+            <input class="field" id="profilePwd" type="password" placeholder="Nova senha (opcional)">
+            <button class="btn" id="saveProfile" type="button">Salvar</button>
+          </form>
+
+          <div style="margin-top:10px" class="small muted">Nota: a conta demo <strong>borba@gmail.com</strong> não permite alteração de senha aqui.</div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Modal for marketplace image -->
+  <div class="modal" id="modal">
+    <div class="box">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div id="modalTitle" style="font-weight:800"></div>
+        <button id="modalClose" class="btn ghost">Fechar</button>
+      </div>
+      <div style="margin-top:10px">
+        <img id="modalImg" alt="Visualização ampliada">
+      </div>
+      <div id="modalDetails" style="margin-top:8px;color:var(--muted);"></div>
+    </div>
+  </div>
+
+  <script>
+    /* ---------- Utilities ---------- */
+
+    function $(sel){return document.querySelector(sel)}
+    function $all(sel){return Array.from(document.querySelectorAll(sel))}
+
+    // storage keys
+    const KEY_CURRENT = 'mm_currentUser';
+    const KEY_USERS = 'mm_users';
+    const KEY_WARD = 'mm_wardrobe';
+    const KEY_MARKET = 'mm_marketplace';
+    const KEY_FORUM = 'mm_forum';
+
+    // guard: only logged users
+    const currentRaw = localStorage.getItem(KEY_CURRENT);
+    if(!currentRaw){
+      // not logged -> redirect
+      window.location.href = 'login.html';
+    }
+    const currentUser = JSON.parse(currentRaw);
+
+    // easy DOM refs
+    const userNameEl = $('#userName');
+    const userEmailEl = $('#userEmail');
+    const sidebarAvatar = $('#sidebarAvatar');
+    const topUserName = $('#topUserName');
+
+    // set user info
+    function renderUserInfo(){
+      userNameEl.textContent = currentUser.name || currentUser.email.split('@')[0];
+      userEmailEl.textContent = currentUser.email;
+      topUserName.textContent = (currentUser.name || currentUser.email.split('@')[0]);
+      // avatar: use initials or an auto picture from picsum
+      const initials = (currentUser.name || currentUser.email).split(' ').map(s=>s[0]).slice(0,2).join('').toUpperCase();
+      sidebarAvatar.textContent = initials;
+    }
+    renderUserInfo();
+
+    // load arrays (safe)
+    function loadArray(key){
+      try{ const r = JSON.parse(localStorage.getItem(key) || '[]'); return Array.isArray(r)? r : []; } catch(e){return [];}
+    }
+    function saveArray(key, arr){ localStorage.setItem(key, JSON.stringify(arr)); }
+
+    /* ---------- seed marketplace if empty ---------- */
+    (function seedMarket(){
+      const mk = loadArray(KEY_MARKET);
+      if(mk.length === 0){
+        const demo = [
+          { id: 'm1', title:'Bolsa Rosa Vintage', price:'120', seller:'Brechó Central', address:'Rua A, 123', img:'https://picsum.photos/seed/bag1/500/400', ownerEmail:'brecho@exemplo.com'},
+          { id: 'm2', title:'Tênis retrô', price:'180', seller:'Loja do Zé', address:'Av. B, 45', img:'https://picsum.photos/seed/shoe1/500/400', ownerEmail:'loja@exemplo.com'},
+          { id: 'm3', title:'Vestido floral', price:'90', seller:'Brechó Rua', address:'Praça C, s/n', img:'https://picsum.photos/seed/dress1/500/400', ownerEmail:'brecho2@exemplo.com'}
+        ];
+        saveArray(KEY_MARKET, demo);
+      }
+    })();
+
+    /* ---------- sections / navigation ---------- */
+    const views = $all('.view');
+    function showSection(id){
+      views.forEach(v => v.style.display = v.id === 'section'+capitalize(id) ? '' : 'none');
+      // highlight menu
+      $all('.menu a').forEach(a=> a.classList.toggle('active', a.dataset.section===id));
+    }
+    function capitalize(s){ return s.charAt(0).toUpperCase() + s.slice(1); }
+
+    // wire menu links
+    $all('.menu a').forEach(a=>{
+      a.addEventListener('click', (e)=>{
+        e.preventDefault();
+        const sec = a.dataset.section;
+        showSection(sec);
+        // update counts when navigating
+        updateCounts();
+      });
+    });
+
+    // quick shortcuts
+    document.addEventListener('keydown', (e)=>{
+      if(e.ctrlKey && e.key.toLowerCase() === 'h') showSection('home');
+      if(e.ctrlKey && e.key.toLowerCase() === 'g') showSection('guarda');
+      if(e.ctrlKey && e.key.toLowerCase() === 'm') showSection('market');
+    });
+
+    // initial
+    showSection('home');
+
+    /* ---------- logout ---------- */
+    $('#btnLogout').addEventListener('click', ()=>{
+      localStorage.removeItem(KEY_CURRENT);
+      window.location.href = 'login.html';
+    });
+
+    // logo click -> go to index (landing)
+    $('#homeLogo').addEventListener('click', ()=> window.location.href = 'index.html');
+
+    /* ---------- Home shortcuts ---------- */
+    $('#openGuardaBtn').addEventListener('click', ()=> showSection('guarda'));
+    $('#openMapBtn').addEventListener('click', ()=> showSection('mapa'));
+    $('#openForumBtn').addEventListener('click', ()=> showSection('forum'));
+    $('#shortcutLook').addEventListener('click', ()=> { showSection('guarda'); setTimeout(()=> $('#btnGenLook').click(), 200); });
+    $('#shortcutAdd').addEventListener('click', ()=> { showSection('guarda'); });
+    $('#shortcutSell').addEventListener('click', ()=> { showSection('market'); });
+
+    /* ---------- Guarda-roupa feature ---------- */
+    function renderWardrobe(){
+      const arr = loadArray(KEY_WARD);
+      $('#wardrobeList').innerHTML = '';
+      arr.forEach(it=>{
+        const div = document.createElement('div');
+        div.className = 'item';
+        div.innerHTML = `<img src="${it.img}" alt="${escapeHtml(it.name)}">
+                         <div style="font-weight:700">${escapeHtml(it.name)}</div>
+                         <div class="muted">${escapeHtml(it.category)}</div>
+                         <div style="display:flex;gap:8px;margin-top:6px">
+                           <button class="btn ghost" data-id="${it.id}" onclick="removePiece(event)">Remover</button>
+                         </div>`;
+        $('#wardrobeList').appendChild(div);
+      });
+      // update counters
+      $('#statItems').textContent = arr.length;
+      $('#countGuarda').textContent = arr.length;
+    }
+
+    // add piece (file -> dataURL)
+    $('#btnAddPiece').addEventListener('click', async ()=>{
+      const name = $('#pieceName').value.trim();
+      const category = $('#pieceCategory').value;
+      const file = $('#pieceFile').files[0];
+      if(!name){ alert('Informe o nome da peça.'); return; }
+      let imgSrc = 'https://picsum.photos/seed/wardrobe_'+Math.floor(Math.random()*9999)+'/500/400';
+      if(file){
+        imgSrc = await fileToDataUrl(file);
+      }
+      const arr = loadArray(KEY_WARD);
+      const id = 'w' + Date.now();
+      arr.unshift({ id, name, category, img: imgSrc, owner: currentUser.email });
+      saveArray(KEY_WARD, arr);
+      $('#pieceName').value='';
+      $('#pieceFile').value='';
+      renderWardrobe();
+      updateCounts();
+    });
+
+    // remove piece (exposed globally for inline onclick)
+    window.removePiece = function(ev){
+      const id = ev.target.dataset.id;
+      let arr = loadArray(KEY_WARD);
+      arr = arr.filter(i=> i.id !== id);
+      saveArray(KEY_WARD, arr);
+      renderWardrobe();
+      updateCounts();
+    };
+
+    // simulated IA: choose up to 4 items randomly and show
+    $('#btnGenLook').addEventListener('click', ()=>{
+      const arr = loadArray(KEY_WARD);
+      if(arr.length === 0){
+        alert('Seu guarda-roupa está vazio. Adicione algumas peças para gerar um look.');
+        return;
+      }
+      // pick up to 4 random unique pieces
+      const copy = [...arr];
+      shuffleArray(copy);
+      const pick = copy.slice(0, Math.min(4, copy.length));
+      $('#iaPreview').innerHTML = '';
+      pick.forEach(p=>{
+        const el = document.createElement('div');
+        el.className = 'item';
+        el.style.minHeight = 'auto';
+        el.innerHTML = `<img src="${p.img}" alt="${escapeHtml(p.name)}"><div style="font-weight:700">${escapeHtml(p.name)}</div><div class="muted">${escapeHtml(p.category)}</div>`;
+        $('#iaPreview').appendChild(el);
+      });
+      $('#iaResult').style.display = '';
+    });
+
+    $('#saveLookBtn').addEventListener('click', ()=> {
+      alert('Look salvo (simulação). Em uma versão real este look seria enviado ao servidor / salvo na conta.');
+    });
+
+    /* ---------- Marketplace ---------- */
+    function renderMarket(){
+      const arr = loadArray(KEY_MARKET);
+      $('#marketList').innerHTML = '';
+      arr.forEach(it=>{
+        const div = document.createElement('div');
+        div.className = 'item';
+        div.innerHTML = `<img src="${it.img}" alt="${escapeHtml(it.title)}" style="cursor:pointer" data-id="${it.id}" onclick="openMarketItem(event)">
+                         <div style="font-weight:700">${escapeHtml(it.title)}</div>
+                         <div class="muted">R$ ${escapeHtml(it.price)}</div>
+                         <div class="muted">${escapeHtml(it.seller)}</div>`;
+        $('#marketList').appendChild(div);
+      });
+      $('#countMarket').textContent = arr.length;
+    }
+
+    // open market item in modal
+    window.openMarketItem = function(ev){
+      const id = ev.target.dataset.id;
+      const arr = loadArray(KEY_MARKET);
+      const it = arr.find(x=>x.id===id);
+      if(!it) return;
+      $('#modalTitle').textContent = it.title + ' — R$ ' + it.price;
+      $('#modalImg').src = it.img;
+      $('#modalDetails').textContent = `Vendedor: ${it.seller} • Endereço: ${it.address || 'não informado'} • Contato: ${it.ownerEmail || '—'}`;
+      $('#modal').style.display = 'flex';
+    };
+
+    $('#modalClose').addEventListener('click', ()=> { $('#modal').style.display='none'; });
+
+    // add listing (file -> dataURL)
+    $('#btnAddMarket').addEventListener('click', async ()=>{
+      const title = $('#marketTitle').value.trim();
+      const price = $('#marketPrice').value.trim();
+      const seller = $('#marketSeller').value.trim() || (currentUser.name || currentUser.email);
+      const addr = $('#marketAddress').value.trim();
+      const file = $('#marketFile').files[0];
+      if(!title || !price){ alert('Preencha título e preço.'); return; }
+      let img = 'https://picsum.photos/seed/market_'+Math.floor(Math.random()*9999)+'/600/420';
+      if(file) img = await fileToDataUrl(file);
+      const arr = loadArray(KEY_MARKET);
+      const id = 'm' + Date.now();
+      arr.unshift({ id, title, price, seller, address: addr, img, ownerEmail: currentUser.email });
+      saveArray(KEY_MARKET, arr);
+      $('#marketTitle').value=''; $('#marketPrice').value=''; $('#marketSeller').value=''; $('#marketAddress').value=''; $('#marketFile').value='';
+      renderMarket();
+      updateCounts();
+    });
+
+    /* ---------- Forum ---------- */
+    function renderForum(){
+      const arr = loadArray(KEY_FORUM).slice().reverse();
+      $('#forumList').innerHTML = '';
+      arr.forEach(p=>{
+        const div = document.createElement('div');
+        div.className = 'item';
+        div.innerHTML = `<div style="width:100%;display:flex;flex-direction:column;align-items:flex-start">
+                          <div style="font-weight:800">${escapeHtml(p.title || '(sem título)')}</div>
+                          <div class="muted small">por ${escapeHtml(p.author)} • ${new Date(p.at).toLocaleString()}</div>
+                          <div style="margin-top:8px;color:var(--muted)">${escapeHtml(p.content || '')}</div>
+                          <div style="margin-top:8px;display:flex;gap:8px">
+                            <button class="btn ghost" onclick="markRead('${p.id}')">Marcar Lido</button>
+                          </div>
+                         </div>`;
+        $('#forumList').appendChild(div);
+      });
+      $('#countForum').textContent = loadArray(KEY_FORUM).length;
+      $('#forumNotifications').textContent = loadArray(KEY_FORUM).filter(f=>!f.read).length + ' novas';
+    }
+
+    $('#btnPost').addEventListener('click', ()=>{
+      const title = $('#postTitle').value.trim();
+      const tags = $('#postTags').value.trim();
+      if(!title){ alert('Título é obrigatório.'); return; }
+      const arr = loadArray(KEY_FORUM);
+      const obj = { id: 'p' + Date.now(), title, tags, author: currentUser.name || currentUser.email, at: new Date().toISOString(), read: false, content: '' };
+      arr.push(obj);
+      saveArray(KEY_FORUM, arr);
+      $('#postTitle').value=''; $('#postTags').value='';
+      renderForum();
+      updateCounts();
+    });
+
+    window.markRead = function(id){
+      const arr = loadArray(KEY_FORUM);
+      const it = arr.find(x=>x.id===id);
+      if(it) it.read = true;
+      saveArray(KEY_FORUM, arr);
+      renderForum();
+      updateCounts();
+    };
+
+    /* ---------- Mapa simulation ---------- */
+    $('#btnFindBrechos').addEventListener('click', ()=>{
+      alert('Simulação: encontramos 3 brechós próximos. O mapa está embutido via OpenStreetMap. Em produção usaríamos APIs de geolocalização + markers.');
+    });
+
+    /* ---------- Perfil editing ---------- */
+    $('#profileName').value = currentUser.name || '';
+    $('#profileEmail').value = currentUser.email || '';
+
+    $('#saveProfile').addEventListener('click', ()=>{
+      const newName = $('#profileName').value.trim();
+      const newPwd = $('#profilePwd').value;
+      if(!newName){ alert('Nome não pode ficar vazio.'); return; }
+      // update mm_currentUser
+      currentUser.name = newName;
+      localStorage.setItem(KEY_CURRENT, JSON.stringify(currentUser));
+      // if user exists in mm_users, update there as well
+      let users = loadArray(KEY_USERS);
+      const idx = users.findIndex(u => (u.email||'').toLowerCase() === currentUser.email.toLowerCase());
+      if(idx !== -1){
+        users[idx].name = newName;
+        if(newPwd && newPwd.length >= 5) users[idx].password = newPwd;
+        saveArray(KEY_USERS, users);
+      } else {
+        // default demo user cannot be updated in mm_users because it's not stored there; only mm_currentUser updated
+        if(currentUser.email === 'borba@gmail.com' && newPwd){
+          alert('Conta demo não permite alteração de senha aqui.');
+        }
+      }
+      alert('Perfil atualizado.');
+      renderUserInfo();
+      $('#profilePwd').value='';
+    });
+
+    /* ---------- Helpers & init ---------- */
+    function fileToDataUrl(file){
+      return new Promise((resolve,reject)=>{
+        const fr = new FileReader();
+        fr.onload = ()=> resolve(fr.result);
+        fr.onerror = reject;
+        fr.readAsDataURL(file);
+      });
+    }
+
+    function shuffleArray(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } }
+
+    function escapeHtml(s){ return String(s).replace(/[&<>"']/g, c=> ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+    // update global counts (home dashboard)
+    function updateCounts(){
+      const w = loadArray(KEY_WARD).length;
+      const m = loadArray(KEY_MARKET).length;
+      const f = loadArray(KEY_FORUM).filter(x=>!x.read).length;
+      $('#statItems').textContent = w;
+      $('#countGuarda').textContent = w;
+      $('#countMarket').textContent = m;
+      $('#countForum').textContent = loadArray(KEY_FORUM).length;
+      $('#forumNotifications').textContent = f + ' novas';
+      $('#countHome').textContent = w + m + loadArray(KEY_FORUM).length;
+    }
+
+    // render initial
+    renderWardrobe();
+    renderMarket();
+    renderForum();
+    updateCounts();
+    renderUserInfo();
+
+    // modal close on backdrop click
+    $('#modal').addEventListener('click', (e)=> { if(e.target === $('#modal')) $('#modal').style.display='none'; });
+
+    // basic search (client-side)
+    $('#globalSearch').addEventListener('input', (e)=>{
+      const q = e.target.value.trim().toLowerCase();
+      if(!q){
+        // reset lists
+        renderWardrobe(); renderMarket(); renderForum();
+        return;
+      }
+      // filter wardrobe
+      const w = loadArray(KEY_WARD).filter(i => (i.name + ' ' + i.category).toLowerCase().includes(q));
+      $('#wardrobeList').innerHTML=''; w.forEach(p=>{
+        const d=document.createElement('div'); d.className='item';
+        d.innerHTML=`<img src="${p.img}"><div style="font-weight:700">${escapeHtml(p.name)}</div><div class="muted">${escapeHtml(p.category)}</div>`;
+        $('#wardrobeList').appendChild(d);
+      });
+      // filter market
+      const mk = loadArray(KEY_MARKET).filter(i => (i.title + ' ' + i.seller).toLowerCase().includes(q));
+      $('#marketList').innerHTML=''; mk.forEach(it=>{
+        const d=document.createElement('div'); d.className='item';
+        d.innerHTML=`<img src="${it.img}" style="cursor:pointer" data-id="${it.id}" onclick="openMarketItem(event)"><div style="font-weight:700">${escapeHtml(it.title)}</div><div class="muted">R$ ${escapeHtml(it.price)}</div>`;
+        $('#marketList').appendChild(d);
+      });
+      // filter forum
+      const fm = loadArray(KEY_FORUM).filter(p => (p.title + ' ' + p.author).toLowerCase().includes(q));
+      $('#forumList').innerHTML=''; fm.forEach(p=>{
+        const d=document.createElement('div'); d.className='item';
+        d.innerHTML=`<div style="font-weight:800">${escapeHtml(p.title)}</div><div class="muted small">por ${escapeHtml(p.author)}</div>`;
+        $('#forumList').appendChild(d);
+      });
+    });
+
+    // small helper: New button opens add forms depending on active section
+    $('#btnNewItem').addEventListener('click', ()=>{
+      // determine active
+      const active = $all('.menu a').find(a=>a.classList.contains('active'));
+      const section = active ? active.dataset.section : 'home';
+      if(section === 'guarda'){ showSection('guarda'); $('#pieceName').focus(); }
+      else if(section === 'market'){ showSection('market'); $('#marketTitle').focus(); }
+      else { showSection('guarda'); $('#pieceName').focus(); }
+    });
+
+  </script>
+</body>
+</html>

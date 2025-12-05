@@ -1,0 +1,347 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Moda & Magia — Assistente de Moda Sustentável</title>
+  <link rel="shortcut icon" href="Group 3.svg" type="image/x-icon">
+
+  <!-- Inline CSS -->
+  <style>
+    :root{
+      --bg:#121212;
+      --paper:#f2f2f2;
+      --accent:#c48fbf;
+      --muted:#bdbdbd;
+      --glass: rgba(255,255,255,0.06);
+      --maxw:1200px;
+      --radius:14px;
+      font-family: "Helvetica Neue", Arial, sans-serif;
+    }
+
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{
+      background: linear-gradient(180deg, #0f0f0f 0%, #161616 100%);
+      color:#eee;
+      line-height:1.4;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      padding-bottom:60px;
+    }
+
+    .wrap{max-width:var(--maxw);margin:0 auto;padding:24px;}
+
+    /* header / nav */
+    header{
+      display:flex;align-items:center;justify-content:space-between;
+      gap:16px;padding:16px 0;
+    }
+    .brand{
+      display:flex;align-items:center;gap:12px;
+    }
+    /* logo area now holds the SVG image */
+    .logo{
+      width:56px;height:56px;border-radius:10px;
+      display:flex;align-items:center;justify-content:center;font-weight:700;color:#111;
+      box-shadow:0 6px 18px rgba(0,0,0,0.6);overflow:hidden;
+      background: linear-gradient(135deg,var(--accent),#7aa0c7);
+    }
+    .logo img{width:100%;height:100%;object-fit:cover;display:block}
+
+    .brand h1{font-size:18px;letter-spacing:0.6px}
+    nav{display:flex;gap:14px;align-items:center}
+    nav a{color:var(--muted);text-decoration:none;padding:8px 12px;border-radius:10px;font-size:14px}
+    nav a:hover{color:#fff;background:var(--glass)}
+    .btn{
+      background:var(--accent);color:#111;padding:8px 14px;border-radius:12px;text-decoration:none;font-weight:700;
+      box-shadow:0 6px 14px rgba(0,0,0,0.5);
+    }
+    .btn.ghost{background:transparent;color:var(--accent);border:1px solid rgba(255,255,255,0.06)}
+    .nav-actions{display:flex;gap:10px;align-items:center}
+
+    /* mobile menu */
+    .hamburger{display:none;width:44px;height:44px;border-radius:10px;background:var(--glass);align-items:center;justify-content:center;cursor:pointer}
+    .hamburger div{width:22px;height:2px;background:#fff;margin:3px 0;border-radius:2px}
+
+    /* hero */
+    .hero{
+      margin-top:22px;padding:32px;border-radius:18px;background:
+      linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      display:grid;grid-template-columns:1fr 340px;gap:24px;align-items:center;
+    }
+    .hero .intro h2{font-size:30px;margin-bottom:8px;color:#fff}
+    .hero .intro p{color:var(--muted);margin-bottom:18px}
+    .cta-row{display:flex;gap:12px;flex-wrap:wrap}
+    .feature-box{
+      background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border-radius:12px;padding:14px;color:var(--muted);margin-top:12px;
+    }
+
+    /* right panel hero */
+    .card{
+      background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+      border-radius:14px;padding:18px;text-align:center;
+      box-shadow:0 8px 30px rgba(0,0,0,0.6);
+    }
+    /* avatar now an img inside circle */
+    .avatar{
+      width:92px;height:92px;border-radius:50%;background:#fff;margin:8px auto 14px;
+      display:flex;align-items:center;justify-content:center;color:#222;font-weight:700;overflow:hidden;
+    }
+    .avatar img{width:100%;height:100%;object-fit:cover;display:block}
+
+    .score-row{display:flex;gap:8px;justify-content:center;margin-top:8px;flex-wrap:wrap}
+    .score{
+      background:rgba(255,255,255,0.03);padding:8px 10px;border-radius:10px;font-weight:700;color:#fff;
+    }
+
+    /* resources */
+    .grid{
+      display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:22px;
+    }
+    .card-small{background:var(--glass);padding:18px;border-radius:12px;color:var(--muted)}
+    .card-small h3{color:#fff;margin-bottom:8px;font-size:16px}
+    .card-small p{font-size:14px;color:var(--muted)}
+
+    /* testimonials / gallery placeholder */
+    .gallery{
+      margin-top:22px;padding:18px;border-radius:12px;background:linear-gradient(180deg,#0c0c0c,#111);
+      display:flex;gap:12px;overflow:auto;
+    }
+    .thumb{min-width:220px;height:140px;border-radius:10px;background:#222;display:flex;align-items:center;justify-content:center;color:#999}
+
+    /* footer */
+    footer{margin-top:34px;padding:20px 0;color:var(--muted);font-size:14px;text-align:center}
+
+    /* responsiveness */
+    @media (max-width:900px){
+      .hero{grid-template-columns:1fr; padding:18px}
+      .grid{grid-template-columns:repeat(2,1fr)}
+      nav .menu-links{display:none}
+      .hamburger{display:flex}
+    }
+    @media (max-width:520px){
+      .grid{grid-template-columns:1fr}
+      .brand h1{font-size:15px}
+      .logo{width:48px;height:48px}
+    }
+
+    /* small utilities */
+    .muted{color:var(--muted)}
+    a.link-inline{color:var(--accent);text-decoration:none}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <!-- Header -->
+    <header>
+      <div class="brand">
+        <!-- SVG logo file: place 'Group 3.svg' in same folder as index.html -->
+        <div class="logo" aria-hidden="true">
+          <img src="Group 3.svg" alt="Logo Moda & Magia">
+        </div>
+
+        <div>
+          <h1>Moda & Magia</h1>
+          <div class="muted" style="font-size:12px">assistente de moda sustentável</div>
+        </div>
+      </div>
+
+      <nav>
+        <div class="menu-links" style="display:flex;gap:12px;align-items:center">
+          <a href="#home">Home</a>
+          <a href="#sobre">Sobre</a>
+          <a href="#marketplace">Marketplace</a>
+          <a href="#mapa">Mapa</a>
+          <a href="#guarda">Meu Guarda-roupa</a>
+          <a href="#forum">Fórum</a>
+        </div>
+
+        <div class="nav-actions">
+          <a class="btn ghost" href="login.html" id="loginTop">Entrar</a>
+          <a class="btn" href="cadastro.html" id="cadastroTop">Cadastrar</a>
+          <div class="hamburger" id="hamb">
+            <div></div><div></div><div></div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <!-- HERO -->
+    <section class="hero" id="home" role="region" aria-label="Apresentação da plataforma">
+      <div class="intro">
+        <h2>Reutilize. Combine. Reinvente o seu guarda-roupa.</h2>
+        <p>Plataforma que gera combinações com IA a partir das suas peças, conecta brechós no mapa e oferece marketplace para moda circular. Ideia e detalhamento no relatório do projeto.</p>
+        <div class="cta-row">
+          <a class="btn" href="login.html">Entrar</a>
+          <a class="btn ghost" href="cadastro.html">Criar Conta</a>
+          <a class="link-inline" href="#sobre" style="align-self:center;padding:8px 0">Saiba mais →</a>
+        </div>
+
+        <div style="display:flex;gap:12px;margin-top:18px;flex-wrap:wrap">
+          <div class="feature-box" style="min-width:180px">
+            <strong>IA para combinações</strong>
+            <div class="muted" style="font-size:13px">Sugestões inteligentes usando suas peças.</div>
+          </div>
+          <div class="feature-box" style="min-width:180px">
+            <strong>Marketplace</strong>
+            <div class="muted" style="font-size:13px">Comércio de moda circular integrado.</div>
+          </div>
+          <div class="feature-box" style="min-width:180px">
+            <strong>Integração com Maps</strong>
+            <div class="muted" style="font-size:13px">Encontre brechós e eventos locais.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- right card hero -->
+      <aside class="card" aria-hidden="false">
+        <div style="font-size:13px;color:var(--muted)">Conta demo</div>
+
+        <!-- avatar agora carrega uma foto aleatória do Picsum (CDN) -->
+        <div class="avatar" id="avatarWrap" title="Foto de exemplo">
+          <!-- imagem será inserida pelo JS -->
+          <img id="avatarImg" alt="Usuário demonstrativo - imagem aleatória">
+        </div>
+
+        <div style="font-weight:700;font-size:16px">Usuário Demonstrativo</div>
+        <div class="muted" style="font-size:13px;margin-top:6px">Exemplo de painel com indicadores</div>
+
+        <div class="score-row" id="scores">
+          <div class="score">Sustentabilidade: <span id="sust">--</span></div>
+          <div class="score">Reuso: <span id="reuso">--</span></div>
+          <div class="score">Economia Local: <span id="eco">--</span></div>
+        </div>
+
+        <div style="margin-top:12px">
+          <a class="btn" href="login.html">Gerar combinações →</a>
+        </div>
+
+        <div style="font-size:12px;color:var(--muted);margin-top:12px">
+          Demonstração baseada no escopo do relatório do projeto. :contentReference[oaicite:0]{index=0}
+        </div>
+      </aside>
+    </section>
+
+    <!-- resources grid -->
+    <section class="grid" aria-label="Funcionalidades principais">
+      <div class="card-small">
+        <h3>Geração com IA</h3>
+        <p>Use as peças cadastradas para receber combinações originais e sustentáveis.</p>
+      </div>
+      <div class="card-small">
+        <h3>Marketplace</h3>
+        <p>Venda e compre peças recirculadas; divulgação de brechós e bazares.</p>
+      </div>
+      <div class="card-small">
+        <h3>Google Maps</h3>
+        <p>Localize lojas e eventos de moda circular próximos a você.</p>
+      </div>
+      <div class="card-small">
+        <h3>Meu Guarda-roupa</h3>
+        <p>Registre suas peças, gerencie combinações salvas e monte looks.</p>
+      </div>
+      <div class="card-small">
+        <h3>Fórum</h3>
+        <p>Compartilhe dicas, troque ideias e aprenda práticas sustentáveis.</p>
+      </div>
+      <div class="card-small">
+        <h3>Sobre</h3>
+        <p>Visão, objetivos e justificativa do projeto (consumo consciente e ODS).</p>
+      </div>
+    </section>
+
+    <!-- gallery / figma preview placeholder -->
+    <section class="gallery" aria-label="Preview de telas (figma)">
+      <div class="thumb">Telas: Registrar peças</div>
+      <div class="thumb">Telas: Guarda-roupa</div>
+      <div class="thumb">Telas: Marketplace</div>
+      <div class="thumb">Telas: Login / Criar Conta</div>
+    </section>
+
+    <!-- callout with short pitch -->
+    <section style="margin-top:18px;padding:18px;border-radius:12px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));">
+      <h3 style="color:#fff">Pitch rápido</h3>
+      <p class="muted">Plataforma que incentiva o reuso de roupas, reduz o impacto do Fast-Fashion e fortalece microempreendedores — combinações por IA, mapa de brechós e marketplace integrado (detalhes no Relatório PI). :contentReference[oaicite:1]{index=1}</p>
+      <div style="margin-top:12px">
+        <a href="cadastro.html" class="btn">Experimente grátis</a>
+        <a href="#sobre" class="btn ghost" style="margin-left:8px">Ler relatório</a>
+      </div>
+    </section>
+
+    <!-- footer -->
+    <footer>
+      <div style="max-width:800px;margin:0 auto">
+        <div style="margin-bottom:8px">Projeto: Moda & Magia — Assistente de Moda Sustentável</div>
+        <div class="muted" style="font-size:13px">Relatório do projeto consultado para o conteúdo da página. :contentReference[oaicite:2]{index=2}</div>
+        <div style="margin-top:8px;font-size:13px">© 2025 — Desenvolvido para demonstração acadêmica</div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Inline JS -->
+  <script>
+    // mobile menu toggle
+    const hamb = document.getElementById('hamb');
+    const menuLinks = document.querySelector('.menu-links');
+    hamb && hamb.addEventListener('click', () => {
+      const isShown = menuLinks.style.display === 'flex';
+      menuLinks.style.display = isShown ? 'none' : 'flex';
+      menuLinks.style.flexDirection = isShown ? '' : 'column';
+      menuLinks.style.background = isShown ? '' : 'rgba(255,255,255,0.02)';
+      menuLinks.style.padding = isShown ? '' : '12px';
+      menuLinks.style.borderRadius = isShown ? '' : '10px';
+    });
+
+    // fake score generator — demonstração de dados dinâmicos
+    function randScore(min=40,max=98){
+      return Math.floor(Math.random()*(max-min+1))+min;
+    }
+    document.getElementById('sust').textContent = randScore(55,95) + ' / 100';
+    document.getElementById('reuso').textContent = randScore(30,90) + ' / 100';
+    document.getElementById('eco').textContent = randScore(20,85) + ' / 100';
+
+    // Simple anchor smooth scroll for internal links
+    document.querySelectorAll('a[href^="#"]').forEach(a=>{
+      a.addEventListener('click', (e)=>{
+        const id = a.getAttribute('href');
+        if(id.length>1){
+          e.preventDefault();
+          const el = document.querySelector(id);
+          if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
+        }
+      });
+    });
+
+    // Accessibility: make login/cadastro accessible via keyboard quick keys (demo)
+    document.addEventListener('keydown', (e)=>{
+      // Ctrl+L -> login, Ctrl+K -> cadastro (demo)
+      if(e.ctrlKey && e.key.toLowerCase()==='l') window.location.href='login.html';
+      if(e.ctrlKey && e.key.toLowerCase()==='k') window.location.href='cadastro.html';
+    });
+
+    // Avatar: load a random CDN photo (Picsum) to fill the avatar circle
+    (function loadRandomAvatar(){
+      const img = document.getElementById('avatarImg');
+      // use a seed so the result varies each load
+      const seed = Math.floor(Math.random()*100000);
+      // request a square image; this CDN returns a random photo
+      const size = 200;
+      const url = 'https://picsum.photos/seed/' + seed + '/' + size;
+      // set src (browsers will fetch automatically). Use crossorigin if needed.
+      img.src = url;
+      img.onload = () => {
+        // optional: small fade-in
+        img.style.transition = 'opacity 240ms ease';
+        img.style.opacity = '1';
+      };
+      img.onerror = () => {
+        // fallback: use a simple data URL placeholder if Picsum fails
+        img.src = 'data:image/svg+xml;utf8,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><rect width="100%" height="100%" fill="#ddd"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-size="28" fill="#777">LM</text></svg>');
+      };
+      // start invisible then show when loaded
+      img.style.opacity = '0';
+    })();
+  </script>
+</body>
+</html>
