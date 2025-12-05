@@ -1,347 +1,388 @@
 <!doctype html>
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Moda & Magia — Assistente de Moda Sustentável</title>
-  <link rel="shortcut icon" href="Group 3.svg" type="image/x-icon">
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Moda & Magia — Inovação</title>
 
-  <!-- Inline CSS -->
-  <style>
-    :root{
-      --bg:#121212;
-      --paper:#f2f2f2;
-      --accent:#c48fbf;
-      --muted:#bdbdbd;
-      --glass: rgba(255,255,255,0.06);
-      --maxw:1200px;
-      --radius:14px;
-      font-family: "Helvetica Neue", Arial, sans-serif;
-    }
+<style>
+  /* -----------------------------------------
+     Paleta base & utilitários
+     ----------------------------------------- */
+  :root{
+    --bg-900: #060607;
+    --bg-800: #0c0c0d;
+    --glass: rgba(255,255,255,0.05);
+    --muted: #bfbcc6;
+    /* mood defaults (Romântico) */
+    --accent-1: #c48fbf; /* rosa/violeta */
+    --accent-2: #7aa0c7; /* azul */
+    --accent-3: #f7e8f5; /* highlight suave */
+    --card-bg: rgba(255,255,255,0.03);
+    --maxw: 1200px;
+    --radius: 14px;
+    font-family: Inter, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    color-scheme: dark;
+  }
+  html,body{height:100%;margin:0}
+  body{
+    background: linear-gradient(180deg,var(--bg-900) 0%, #0b0b0c 100%);
+    color:#eef1f4;
+    -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;
+    line-height:1.4;
+    overflow-y:auto;
+  }
+  .wrap{max-width:var(--maxw);margin:20px auto;padding:18px;display:grid;gap:18px}
 
-    *{box-sizing:border-box;margin:0;padding:0}
-    body{
-      background: linear-gradient(180deg, #0f0f0f 0%, #161616 100%);
-      color:#eee;
-      line-height:1.4;
-      -webkit-font-smoothing:antialiased;
-      -moz-osx-font-smoothing:grayscale;
-      padding-bottom:60px;
-    }
+  /* -----------------------------------------
+     Topbar
+     ----------------------------------------- */
+  header.topbar{
+    display:flex;align-items:center;justify-content:space-between;gap:12px;
+  }
+  .brand{
+    display:flex;align-items:center;gap:12px;
+  }
+  .logo{
+    width:56px;height:56px;border-radius:12px;overflow:hidden;display:flex;align-items:center;justify-content:center;
+    background:linear-gradient(135deg,var(--accent-1),var(--accent-2));box-shadow:0 10px 30px rgba(0,0,0,0.6);cursor:pointer;
+    border:1px solid rgba(255,255,255,0.04);
+  }
+  .logo img{width:100%;height:100%;object-fit:cover;display:block}
+  .brand h1{font-size:16px;margin:0}
+  .brand p{margin:0;font-size:12px;color:var(--muted)}
 
-    .wrap{max-width:var(--maxw);margin:0 auto;padding:24px;}
+  nav.controls{display:flex;align-items:center;gap:10px}
+  nav a{color:var(--muted);text-decoration:none;padding:8px 12px;border-radius:10px}
+  nav a:hover{background:var(--card-bg);color:#fff}
+  .btn{
+    display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:12px;background:var(--accent-1);color:#111;font-weight:800;border:0;cursor:pointer;
+    box-shadow: 0 12px 30px rgba(196,143,191,0.12);
+  }
+  .btn.ghost{background:transparent;color:var(--accent-1);border:1px solid rgba(255,255,255,0.04)}
+  .mood-switch{display:flex;gap:6px;align-items:center;padding:6px;border-radius:999px;background:rgba(255,255,255,0.02)}
 
-    /* header / nav */
-    header{
-      display:flex;align-items:center;justify-content:space-between;
-      gap:16px;padding:16px 0;
-    }
-    .brand{
-      display:flex;align-items:center;gap:12px;
-    }
-    /* logo area now holds the SVG image */
-    .logo{
-      width:56px;height:56px;border-radius:10px;
-      display:flex;align-items:center;justify-content:center;font-weight:700;color:#111;
-      box-shadow:0 6px 18px rgba(0,0,0,0.6);overflow:hidden;
-      background: linear-gradient(135deg,var(--accent),#7aa0c7);
-    }
-    .logo img{width:100%;height:100%;object-fit:cover;display:block}
+  /* -----------------------------------------
+     Hero inovador - split diagonal
+     ----------------------------------------- */
+  .hero{
+    display:grid;grid-template-columns: 1fr 460px;gap:24px;align-items:stretch;
+    min-height:360px;
+  }
 
-    .brand h1{font-size:18px;letter-spacing:0.6px}
-    nav{display:flex;gap:14px;align-items:center}
-    nav a{color:var(--muted);text-decoration:none;padding:8px 12px;border-radius:10px;font-size:14px}
-    nav a:hover{color:#fff;background:var(--glass)}
-    .btn{
-      background:var(--accent);color:#111;padding:8px 14px;border-radius:12px;text-decoration:none;font-weight:700;
-      box-shadow:0 6px 14px rgba(0,0,0,0.5);
-    }
-    .btn.ghost{background:transparent;color:var(--accent);border:1px solid rgba(255,255,255,0.06)}
-    .nav-actions{display:flex;gap:10px;align-items:center}
-
-    /* mobile menu */
-    .hamburger{display:none;width:44px;height:44px;border-radius:10px;background:var(--glass);align-items:center;justify-content:center;cursor:pointer}
-    .hamburger div{width:22px;height:2px;background:#fff;margin:3px 0;border-radius:2px}
-
-    /* hero */
-    .hero{
-      margin-top:22px;padding:32px;border-radius:18px;background:
+  /* left area: content cards stacked */
+  .hero-left{
+    padding:28px;border-radius:18px;background:
       linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-      display:grid;grid-template-columns:1fr 340px;gap:24px;align-items:center;
-    }
-    .hero .intro h2{font-size:30px;margin-bottom:8px;color:#fff}
-    .hero .intro p{color:var(--muted);margin-bottom:18px}
-    .cta-row{display:flex;gap:12px;flex-wrap:wrap}
-    .feature-box{
-      background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-      border-radius:12px;padding:14px;color:var(--muted);margin-top:12px;
-    }
+    position:relative;overflow:hidden;
+  }
+  .hero-left:before{
+    content:"";position:absolute;right:-120px;top:-120px;width:520px;height:520px;border-radius:50%;
+    background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.03), transparent 40%);
+    transform:rotate(10deg);pointer-events:none;
+  }
 
-    /* right panel hero */
-    .card{
-      background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
-      border-radius:14px;padding:18px;text-align:center;
-      box-shadow:0 8px 30px rgba(0,0,0,0.6);
-    }
-    /* avatar now an img inside circle */
-    .avatar{
-      width:92px;height:92px;border-radius:50%;background:#fff;margin:8px auto 14px;
-      display:flex;align-items:center;justify-content:center;color:#222;font-weight:700;overflow:hidden;
-    }
-    .avatar img{width:100%;height:100%;object-fit:cover;display:block}
+  .eyebrow{font-size:13px;color:var(--muted);letter-spacing:0.6px;margin-bottom:8px}
+  .headline{font-size:34px;margin:6px 0 12px;line-height:1.02}
+  .lead{color:var(--muted);max-width:60%}
 
-    .score-row{display:flex;gap:8px;justify-content:center;margin-top:8px;flex-wrap:wrap}
-    .score{
-      background:rgba(255,255,255,0.03);padding:8px 10px;border-radius:10px;font-weight:700;color:#fff;
-    }
+  .cards-row{display:flex;gap:12px;margin-top:18px;flex-wrap:wrap}
+  .glass-card{
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border-radius:12px;padding:14px;min-width:160px;flex:1;backdrop-filter: blur(6px);
+    transition: transform .28s cubic-bezier(.2,.9,.3,1), box-shadow .28s;
+    box-shadow: 0 8px 28px rgba(0,0,0,0.5);
+  }
+  .glass-card:hover{transform:translateY(-8px);box-shadow: 0 18px 50px rgba(0,0,0,0.6)}
 
-    /* resources */
-    .grid{
-      display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:22px;
-    }
-    .card-small{background:var(--glass);padding:18px;border-radius:12px;color:var(--muted)}
-    .card-small h3{color:#fff;margin-bottom:8px;font-size:16px}
-    .card-small p{font-size:14px;color:var(--muted)}
+  .cta-row{display:flex;gap:12px;margin-top:18px;align-items:center}
+  .cta-hero{
+    position:relative;overflow:hidden;
+  }
+  .cta-hero .shimmer{
+    position:absolute;left:-60%;top:-40%;width:220%;height:220%;transform:rotate(25deg);filter:blur(42px);
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent);
+    opacity:0;transition:opacity .4s;
+  }
+  .cta-hero:hover .shimmer{opacity:1}
+  .cta-hero .btn{font-size:15px;padding:12px 18px}
 
-    /* testimonials / gallery placeholder */
-    .gallery{
-      margin-top:22px;padding:18px;border-radius:12px;background:linear-gradient(180deg,#0c0c0c,#111);
-      display:flex;gap:12px;overflow:auto;
-    }
-    .thumb{min-width:220px;height:140px;border-radius:10px;background:#222;display:flex;align-items:center;justify-content:center;color:#999}
+  /* right area: diagonal visual */
+  .hero-right{
+    position:relative;border-radius:18px;overflow:hidden;display:flex;align-items:stretch;justify-content:center;
+    background:
+      linear-gradient(135deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    box-shadow: 0 12px 40px rgba(0,0,0,0.6);
+  }
 
-    /* footer */
-    footer{margin-top:34px;padding:20px 0;color:var(--muted);font-size:14px;text-align:center}
+  .hero-right .visual{
+    width:100%;height:100%;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;
+  }
+  .diagonal{
+    position:absolute;right:-20%;top:-40%;width:160%;height:160%;transform:rotate(18deg);
+    background: linear-gradient(90deg, rgba(196,143,191,0.12), rgba(122,160,199,0.08));
+    filter: blur(8px);opacity:0.9;
+  }
+  .visual-contents{position:relative;z-index:2;padding:22px;display:flex;flex-direction:column;gap:12px;align-items:center}
 
-    /* responsiveness */
-    @media (max-width:900px){
-      .hero{grid-template-columns:1fr; padding:18px}
-      .grid{grid-template-columns:repeat(2,1fr)}
-      nav .menu-links{display:none}
-      .hamburger{display:flex}
-    }
-    @media (max-width:520px){
-      .grid{grid-template-columns:1fr}
-      .brand h1{font-size:15px}
-      .logo{width:48px;height:48px}
-    }
+  .visual-preview{
+    width:240px;height:240px;border-radius:18px;background:linear-gradient(180deg,#fff,#f7f7f7);overflow:hidden;display:flex;align-items:center;justify-content:center;
+    box-shadow: 0 18px 40px rgba(0,0,0,0.5);
+  }
+  .visual-preview img{width:100%;height:100%;object-fit:cover}
 
-    /* small utilities */
-    .muted{color:var(--muted)}
-    a.link-inline{color:var(--accent);text-decoration:none}
-  </style>
+  /* mini-dashboard panel */
+  .mini-panel{
+    position:absolute;left:14px;bottom:14px;padding:12px;border-radius:12px;background:linear-gradient(180deg,rgba(0,0,0,0.45),rgba(0,0,0,0.25));
+    color:var(--muted);backdrop-filter: blur(6px);box-shadow:0 12px 36px rgba(0,0,0,0.6);
+  }
+  .mini-panel .score{font-weight:800;color:#fff;font-size:18px}
+
+  /* resources / grid */
+  .features{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:6px}
+  .feature{background:var(--card-bg);padding:12px;border-radius:10px;text-align:center;color:var(--muted)}
+  .feature h5{margin:0 0 8px;color:#fff}
+
+  /* footer */
+  footer{margin-top:6px;color:var(--muted);text-align:center;padding:18px 0;font-size:13px}
+
+  /* responsiveness */
+  @media (max-width:980px){
+    .hero{grid-template-columns:1fr;gap:12px}
+    .hero-left .lead{max-width:100%}
+    .features{grid-template-columns:repeat(2,1fr)}
+  }
+  @media (max-width:520px){
+    .features{grid-template-columns:1fr}
+    .visual-preview{width:180px;height:180px}
+    .brand h1{font-size:15px}
+    .logo{width:48px;height:48px}
+  }
+</style>
 </head>
 <body>
-  <div class="wrap">
-    <!-- Header -->
-    <header>
-      <div class="brand">
-        <!-- SVG logo file: place 'Group 3.svg' in same folder as index.html -->
-        <div class="logo" aria-hidden="true">
-          <img src="Group 3.svg" alt="Logo Moda & Magia">
+  <div class="wrap" role="main">
+    <!-- topbar -->
+    <header class="topbar" role="banner" aria-label="Cabeçalho">
+      <div class="brand" title="Ir para a landing">
+        <div class="logo" id="logoBtn">
+          <img src="Group 3.svg" alt="Moda & Magia">
         </div>
-
         <div>
           <h1>Moda & Magia</h1>
-          <div class="muted" style="font-size:12px">assistente de moda sustentável</div>
+          <p>assistente de moda sustentável</p>
         </div>
       </div>
 
-      <nav>
-        <div class="menu-links" style="display:flex;gap:12px;align-items:center">
-          <a href="#home">Home</a>
-          <a href="#sobre">Sobre</a>
-          <a href="#marketplace">Marketplace</a>
-          <a href="#mapa">Mapa</a>
-          <a href="#guarda">Meu Guarda-roupa</a>
-          <a href="#forum">Fórum</a>
+      <nav class="controls" role="navigation">
+        <div class="mood-switch" role="toolbar" aria-label="Alterar mood">
+          <button class="mood" data-mood="romantico" title="Romântico" aria-pressed="true" style="width:28px;height:28px;border-radius:8px;background:#c48fbf;border:0;cursor:pointer"></button>
+          <button class="mood" data-mood="classico" title="Clássico" aria-pressed="false" style="width:28px;height:28px;border-radius:8px;background:#7aa0c7;border:0;cursor:pointer"></button>
+          <button class="mood" data-mood="solar" title="Solar" aria-pressed="false" style="width:28px;height:28px;border-radius:8px;background:#f6b58b;border:0;cursor:pointer"></button>
         </div>
 
-        <div class="nav-actions">
-          <a class="btn ghost" href="login.html" id="loginTop">Entrar</a>
-          <a class="btn" href="cadastro.html" id="cadastroTop">Cadastrar</a>
-          <div class="hamburger" id="hamb">
-            <div></div><div></div><div></div>
-          </div>
-        </div>
+        <a href="login.html" class="btn ghost" id="loginBtn">Entrar</a>
+        <a href="cadastro.html" class="btn" id="signupBtn">Cadastrar</a>
       </nav>
     </header>
 
-    <!-- HERO -->
-    <section class="hero" id="home" role="region" aria-label="Apresentação da plataforma">
-      <div class="intro">
-        <h2>Reutilize. Combine. Reinvente o seu guarda-roupa.</h2>
-        <p>Plataforma que gera combinações com IA a partir das suas peças, conecta brechós no mapa e oferece marketplace para moda circular. Ideia e detalhamento no relatório do projeto.</p>
+    <!-- hero -->
+    <section class="hero" aria-label="Apresentação">
+      <div class="hero-left" aria-hidden="false">
+        <div class="eyebrow">Nova proposta</div>
+        <h2 class="headline">Moda circular com um toque de magia — <span style="color:var(--accent-2)">experimente</span> o reuso inteligente</h2>
+        <p class="lead">Plataforma que ajuda a registrar suas peças, gerar combinações por IA e conectar você a brechós e marketplaces locais. Apostamos em um design que inspira e facilita a ação.</p>
+
+        <div class="cards-row">
+          <div class="glass-card" aria-hidden="false">
+            <div class="muted">Peças cadastradas</div>
+            <div style="font-size:22px;font-weight:800" id="statPieces">—</div>
+          </div>
+          <div class="glass-card">
+            <div class="muted">Combinações geradas</div>
+            <div style="font-size:22px;font-weight:800" id="statCombos">—</div>
+          </div>
+          <div class="glass-card">
+            <div class="muted">Brechós próximos</div>
+            <div style="font-size:22px;font-weight:800" id="statBrechos">—</div>
+          </div>
+        </div>
+
         <div class="cta-row">
-          <a class="btn" href="login.html">Entrar</a>
-          <a class="btn ghost" href="cadastro.html">Criar Conta</a>
-          <a class="link-inline" href="#sobre" style="align-self:center;padding:8px 0">Saiba mais →</a>
-        </div>
-
-        <div style="display:flex;gap:12px;margin-top:18px;flex-wrap:wrap">
-          <div class="feature-box" style="min-width:180px">
-            <strong>IA para combinações</strong>
-            <div class="muted" style="font-size:13px">Sugestões inteligentes usando suas peças.</div>
+          <div class="cta-hero">
+            <button class="btn" id="mainCTA">Explorar combinações
+              <svg width="18" height="18" viewBox="0 0 24 24" style="margin-left:6px;filter:drop-shadow(0 6px 8px rgba(0,0,0,0.25))">
+                <path fill="#111" d="M2 12h14l-5-5 1.4-1.4L22 12l-9.6 9.4L11 20l5-5H2z"></path>
+              </svg>
+            </button>
+            <div class="shimmer"></div>
           </div>
-          <div class="feature-box" style="min-width:180px">
-            <strong>Marketplace</strong>
-            <div class="muted" style="font-size:13px">Comércio de moda circular integrado.</div>
+
+          <button class="btn ghost" id="ctaLearn">Ler relatório</button>
+        </div>
+
+        <div class="features" style="margin-top:18px">
+          <div class="feature"><h5>IA para looks</h5><div class="muted">Sugestões a partir das suas peças</div></div>
+          <div class="feature"><h5>Marketplace</h5><div class="muted">Comércio circular integrado</div></div>
+          <div class="feature"><h5>Mapas</h5><div class="muted">Encontre brechós e pontos locais</div></div>
+          <div class="feature"><h5>Fórum</h5><div class="muted">Troque dicas e inspirações</div></div>
+        </div>
+      </div>
+
+      <div class="hero-right" aria-hidden="false">
+        <div class="visual">
+          <div class="diagonal" aria-hidden="true"></div>
+          <div class="visual-contents">
+            <div class="visual-preview" id="visualPreview">
+              <!-- imagem aleatória de produto carregada por JS -->
+              <img id="heroImage" alt="Exemplo de produto">
+            </div>
+
+            <div class="mini-panel" role="complementary">
+              <div class="muted">Conta demo</div>
+              <div class="score" id="miniScore">— / 100</div>
+              <div style="margin-top:8px"><small class="muted">Sustentabilidade • Reuso • Economia local</small></div>
+            </div>
           </div>
-          <div class="feature-box" style="min-width:180px">
-            <strong>Integração com Maps</strong>
-            <div class="muted" style="font-size:13px">Encontre brechós e eventos locais.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- quick gallery / previews -->
+    <section aria-label="Preview de telas">
+      <div style="display:flex;gap:12px;flex-wrap:wrap">
+        <div style="flex:1;min-width:220px" class="glass-card">
+          <div class="muted">Meu Guarda-roupa</div>
+          <div style="height:110px;margin-top:8px;border-radius:10px;overflow:hidden;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));display:flex;align-items:center;justify-content:center">
+            <small class="muted">Adicionar peças • Gerar combinações</small>
+          </div>
+        </div>
+
+        <div style="flex:1;min-width:220px" class="glass-card">
+          <div class="muted">Marketplace</div>
+          <div style="height:110px;margin-top:8px;border-radius:10px;overflow:hidden;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));display:flex;align-items:center;justify-content:center">
+            <small class="muted">Publicar e ampliar anúncios</small>
+          </div>
+        </div>
+
+        <div style="width:220px" class="glass-card">
+          <div class="muted">Fórum</div>
+          <div style="height:110px;margin-top:8px;border-radius:10px;overflow:hidden;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));display:flex;align-items:center;justify-content:center">
+            <small class="muted">Discussões e notificações</small>
           </div>
         </div>
       </div>
-
-      <!-- right card hero -->
-      <aside class="card" aria-hidden="false">
-        <div style="font-size:13px;color:var(--muted)">Conta demo</div>
-
-        <!-- avatar agora carrega uma foto aleatória do Picsum (CDN) -->
-        <div class="avatar" id="avatarWrap" title="Foto de exemplo">
-          <!-- imagem será inserida pelo JS -->
-          <img id="avatarImg" alt="Usuário demonstrativo - imagem aleatória">
-        </div>
-
-        <div style="font-weight:700;font-size:16px">Usuário Demonstrativo</div>
-        <div class="muted" style="font-size:13px;margin-top:6px">Exemplo de painel com indicadores</div>
-
-        <div class="score-row" id="scores">
-          <div class="score">Sustentabilidade: <span id="sust">--</span></div>
-          <div class="score">Reuso: <span id="reuso">--</span></div>
-          <div class="score">Economia Local: <span id="eco">--</span></div>
-        </div>
-
-        <div style="margin-top:12px">
-          <a class="btn" href="login.html">Gerar combinações →</a>
-        </div>
-
-        <div style="font-size:12px;color:var(--muted);margin-top:12px">
-          Demonstração baseada no escopo do relatório do projeto. :contentReference[oaicite:0]{index=0}
-        </div>
-      </aside>
     </section>
 
-    <!-- resources grid -->
-    <section class="grid" aria-label="Funcionalidades principais">
-      <div class="card-small">
-        <h3>Geração com IA</h3>
-        <p>Use as peças cadastradas para receber combinações originais e sustentáveis.</p>
-      </div>
-      <div class="card-small">
-        <h3>Marketplace</h3>
-        <p>Venda e compre peças recirculadas; divulgação de brechós e bazares.</p>
-      </div>
-      <div class="card-small">
-        <h3>Google Maps</h3>
-        <p>Localize lojas e eventos de moda circular próximos a você.</p>
-      </div>
-      <div class="card-small">
-        <h3>Meu Guarda-roupa</h3>
-        <p>Registre suas peças, gerencie combinações salvas e monte looks.</p>
-      </div>
-      <div class="card-small">
-        <h3>Fórum</h3>
-        <p>Compartilhe dicas, troque ideias e aprenda práticas sustentáveis.</p>
-      </div>
-      <div class="card-small">
-        <h3>Sobre</h3>
-        <p>Visão, objetivos e justificativa do projeto (consumo consciente e ODS).</p>
-      </div>
-    </section>
-
-    <!-- gallery / figma preview placeholder -->
-    <section class="gallery" aria-label="Preview de telas (figma)">
-      <div class="thumb">Telas: Registrar peças</div>
-      <div class="thumb">Telas: Guarda-roupa</div>
-      <div class="thumb">Telas: Marketplace</div>
-      <div class="thumb">Telas: Login / Criar Conta</div>
-    </section>
-
-    <!-- callout with short pitch -->
-    <section style="margin-top:18px;padding:18px;border-radius:12px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));">
-      <h3 style="color:#fff">Pitch rápido</h3>
-      <p class="muted">Plataforma que incentiva o reuso de roupas, reduz o impacto do Fast-Fashion e fortalece microempreendedores — combinações por IA, mapa de brechós e marketplace integrado (detalhes no Relatório PI). :contentReference[oaicite:1]{index=1}</p>
-      <div style="margin-top:12px">
-        <a href="cadastro.html" class="btn">Experimente grátis</a>
-        <a href="#sobre" class="btn ghost" style="margin-left:8px">Ler relatório</a>
-      </div>
-    </section>
-
-    <!-- footer -->
     <footer>
-      <div style="max-width:800px;margin:0 auto">
-        <div style="margin-bottom:8px">Projeto: Moda & Magia — Assistente de Moda Sustentável</div>
-        <div class="muted" style="font-size:13px">Relatório do projeto consultado para o conteúdo da página. :contentReference[oaicite:2]{index=2}</div>
-        <div style="margin-top:8px;font-size:13px">© 2025 — Desenvolvido para demonstração acadêmica</div>
-      </div>
+      <div class="muted">Protótipo acadêmico • Dados de demonstração • Design inspirado no Relatório PI</div>
     </footer>
   </div>
 
-  <!-- Inline JS -->
-  <script>
-    // mobile menu toggle
-    const hamb = document.getElementById('hamb');
-    const menuLinks = document.querySelector('.menu-links');
-    hamb && hamb.addEventListener('click', () => {
-      const isShown = menuLinks.style.display === 'flex';
-      menuLinks.style.display = isShown ? 'none' : 'flex';
-      menuLinks.style.flexDirection = isShown ? '' : 'column';
-      menuLinks.style.background = isShown ? '' : 'rgba(255,255,255,0.02)';
-      menuLinks.style.padding = isShown ? '' : '12px';
-      menuLinks.style.borderRadius = isShown ? '' : '10px';
-    });
+<script>
+  /* -----------------------------------------
+     Interações JS - mood, images, fake metrics
+     ----------------------------------------- */
 
-    // fake score generator — demonstração de dados dinâmicos
-    function randScore(min=40,max=98){
-      return Math.floor(Math.random()*(max-min+1))+min;
+  // moods configuration
+  const MOODS = {
+    romantico: {
+      accent1: '#c48fbf',
+      accent2: '#7aa0c7',
+      accent3: '#f7e8f5',
+      panel: 'rgba(196,143,191,0.12)'
+    },
+    classico: {
+      accent1: '#7aa0c7',
+      accent2: '#c48fbf',
+      accent3: '#e8f4fb',
+      panel: 'rgba(122,160,199,0.12)'
+    },
+    solar: {
+      accent1: '#f6b58b',
+      accent2: '#c48fbf',
+      accent3: '#fff1ea',
+      panel: 'rgba(246,181,139,0.12)'
     }
-    document.getElementById('sust').textContent = randScore(55,95) + ' / 100';
-    document.getElementById('reuso').textContent = randScore(30,90) + ' / 100';
-    document.getElementById('eco').textContent = randScore(20,85) + ' / 100';
+  };
 
-    // Simple anchor smooth scroll for internal links
-    document.querySelectorAll('a[href^="#"]').forEach(a=>{
-      a.addEventListener('click', (e)=>{
-        const id = a.getAttribute('href');
-        if(id.length>1){
-          e.preventDefault();
-          const el = document.querySelector(id);
-          if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
-        }
-      });
+  // mood switching
+  const moodButtons = document.querySelectorAll('.mood');
+  function applyMood(name){
+    const m = MOODS[name] || MOODS.romantico;
+    document.documentElement.style.setProperty('--accent-1', m.accent1);
+    document.documentElement.style.setProperty('--accent-2', m.accent2);
+    document.documentElement.style.setProperty('--accent-3', m.accent3);
+    document.querySelectorAll('.diagonal').forEach(d => d.style.background = `linear-gradient(90deg, ${m.accent1}22, ${m.accent2}18)`);
+    // set aria-pressed
+    moodButtons.forEach(b => b.setAttribute('aria-pressed', b.dataset.mood === name ? 'true' : 'false'));
+  }
+  moodButtons.forEach(b=>{
+    b.addEventListener('click', ()=> applyMood(b.dataset.mood));
+  });
+  // default mood
+  applyMood('romantico');
+
+  // logo click -> index (reload)
+  document.getElementById('logoBtn').addEventListener('click', ()=> location.href = 'index.html');
+
+  // CTA behavior: go to generated combinations (for demo: redirect to home.html if exists)
+  document.getElementById('mainCTA').addEventListener('click', ()=>{
+    // if user logged -> go to home, else to login
+    const cur = localStorage.getItem('mm_currentUser');
+    if(cur) location.href = 'home.html';
+    else location.href = 'login.html';
+  });
+
+  // login/signup quick keys
+  document.addEventListener('keydown', (e)=>{
+    if(e.ctrlKey && e.key.toLowerCase()==='l') location.href='login.html';
+    if(e.ctrlKey && e.key.toLowerCase()==='k') location.href='cadastro.html';
+  });
+
+  // load a hero image randomly from Picsum
+  (function loadHeroImg(){
+    const img = document.getElementById('heroImage');
+    const seed = Math.floor(Math.random()*99999);
+    img.src = 'https://picsum.photos/seed/hero_'+seed+'/800/800';
+    img.alt = 'Visual de apresentação';
+    img.onload = ()=> img.style.opacity = '1';
+  })();
+
+  // fake metrics generator
+  function rand(min,max){ return Math.floor(Math.random()*(max-min+1))+min; }
+  document.getElementById('statPieces').textContent = rand(8,72);
+  document.getElementById('statCombos').textContent = rand(10,320);
+  document.getElementById('statBrechos').textContent = rand(1,12);
+  document.getElementById('miniScore').textContent = rand(40,96) + ' / 100';
+
+  // show current user if logged (display in topbar brand)
+  (function showIfLogged(){
+    try{
+      const cur = JSON.parse(localStorage.getItem('mm_currentUser') || 'null');
+      if(cur && cur.email){
+        const brand = document.querySelector('.brand p');
+        brand.textContent = cur.name ? cur.name + ' • ' + cur.email : cur.email;
+      }
+    }catch(e){}
+  })();
+
+  // small hover parallax for visual preview
+  (function addParallax(){
+    const vp = document.getElementById('visualPreview');
+    vp.addEventListener('mousemove', (ev)=>{
+      const r = vp.getBoundingClientRect();
+      const mx = (ev.clientX - r.left) / r.width - 0.5;
+      const my = (ev.clientY - r.top) / r.height - 0.5;
+      vp.style.transform = `translate3d(${mx*8}px, ${my*8}px, 0) rotate(${mx*2}deg)`;
     });
+    vp.addEventListener('mouseleave', ()=> vp.style.transform = 'none');
+  })();
 
-    // Accessibility: make login/cadastro accessible via keyboard quick keys (demo)
-    document.addEventListener('keydown', (e)=>{
-      // Ctrl+L -> login, Ctrl+K -> cadastro (demo)
-      if(e.ctrlKey && e.key.toLowerCase()==='l') window.location.href='login.html';
-      if(e.ctrlKey && e.key.toLowerCase()==='k') window.location.href='cadastro.html';
-    });
-
-    // Avatar: load a random CDN photo (Picsum) to fill the avatar circle
-    (function loadRandomAvatar(){
-      const img = document.getElementById('avatarImg');
-      // use a seed so the result varies each load
-      const seed = Math.floor(Math.random()*100000);
-      // request a square image; this CDN returns a random photo
-      const size = 200;
-      const url = 'https://picsum.photos/seed/' + seed + '/' + size;
-      // set src (browsers will fetch automatically). Use crossorigin if needed.
-      img.src = url;
-      img.onload = () => {
-        // optional: small fade-in
-        img.style.transition = 'opacity 240ms ease';
-        img.style.opacity = '1';
-      };
-      img.onerror = () => {
-        // fallback: use a simple data URL placeholder if Picsum fails
-        img.src = 'data:image/svg+xml;utf8,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><rect width="100%" height="100%" fill="#ddd"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-size="28" fill="#777">LM</text></svg>');
-      };
-      // start invisible then show when loaded
-      img.style.opacity = '0';
-    })();
-  </script>
+  // accessible focus outlines
+  document.addEventListener('keydown', (e)=> {
+    if(e.key === 'Tab') document.documentElement.style.setProperty('--focus-outline', '2px solid rgba(255,255,255,0.12)');
+  });
+</script>
 </body>
 </html>
